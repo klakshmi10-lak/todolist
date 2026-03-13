@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Shop ToDo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1><i class="fa-solid fa-store"></i> Daily Shop ToDo</h1>
+            <p>Manage your daily shopping items beautifully.</p>
+        </header>
+        
+        <form action="{{ url_for('add') }}" method="POST" class="add-form">
+            <input type="text" name="title" placeholder="What do you need to buy?" required autocomplete="off">
+            <button type="submit"><i class="fa-solid fa-plus"></i> Add</button>
+        </form>
+
+        <ul class="todo-list">
+            {% for todo in todos %}
+            <li class="todo-item {% if todo.completed %}completed{% endif %}" style="animation-delay: {{ loop.index0 * 0.05 }}s;">
+                <a href="{{ url_for('toggle', todo_id=todo.id) }}" class="toggle-btn" aria-label="Toggle completion">
+                    {% if todo.completed %}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {% else %}
+                        <i class="fa-regular fa-circle"></i>
+                    {% endif %}
+                </a>
+                <span class="todo-text">{{ todo.title }}</span>
+                <a href="{{ url_for('delete', todo_id=todo.id) }}" class="delete-btn" aria-label="Delete item">
+                    <i class="fa-solid fa-trash-can"></i>
+                </a>
+            </li>
+            {% else %}
+            <li class="empty-state">
+                <i class="fa-solid fa-basket-shopping"></i>
+                <p>Your shopping list is empty! Start adding items.</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
